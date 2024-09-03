@@ -1,12 +1,12 @@
 import { Controller, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
-import { DeleteUserService } from './delete-user.service';
+import { DeleteUserServiceHandler } from './delete-user.service';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 import { Request, Response } from 'express';
 import { DeleteUserCommand } from './delete-user.dto';
 
 @Controller('delete-user')
 export class DeleteUserController {
-  constructor(private readonly deleteUserService: DeleteUserService) {}
+  constructor(private readonly deleteUserService: DeleteUserServiceHandler) {}
 
   @Post() 
   public async handle(

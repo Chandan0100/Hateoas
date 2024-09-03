@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { AddUser } from './add-user.interface'
 
 @Injectable()
-export class AddUserService {
+export class AddUserServiceHandler {
 
     constructor(
         private readonly userRepository: UserRepository

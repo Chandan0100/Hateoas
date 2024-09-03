@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { AddUserService } from './add-user.service';
+import { AddUserServiceHandler } from './add-user.service';
 import { Response } from 'express';
 import { AddUserCommand } from './add-user.dto';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
@@ -7,7 +7,7 @@ import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 @Controller('add-user')
 export class AddUserController {
   constructor(
-    private readonly addUserService: AddUserService
+    private readonly addUserService: AddUserServiceHandler
   ) {}
 
   @Post() 

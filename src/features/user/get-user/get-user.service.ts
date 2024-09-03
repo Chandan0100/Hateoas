@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
-import { DeleteUser } from './delete-user.interface';
-
-import { AddUser } from '../add-user/add-user.interface';
+import { GetUser } from './get-user.interface';
 
 @Injectable()
-export class DeleteUserServiceHandler {
+export class GetUserServiceHandler {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async handle(obj: AddUser) {
+  public async handle(payload: GetUser) {
     try {
-      const user = await this.userRepository.createUser(obj);
+      const user = await this.userRepository.getUserByUUID(payload.uuid);
       const response = user;
       response['_links'] = {
-        self: ``,
+        self: {
+          href: '/get-user',
+        },
       };
       return response;
     } catch (error) {

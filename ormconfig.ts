@@ -17,13 +17,12 @@ export const dataSourceOptions = (
   migrationsTableName: 'migrations',
   migrations: ['dist/src/infrastructure/database/migrations/*.js'],
   seeds: ['dist/src/infrastructure/database/seeders/*.js'],
-  seedTracking: true
+  seedTracking: true,
 });
 
 export const dataSource = new DataSource(
   dataSourceOptions(new ConfigService()),
 );
-
 
 dataSource
   .initialize()
@@ -32,4 +31,4 @@ dataSource
   })
   .catch((error) => {
     console.error('Error during Data Source initialization:', error);
-});
+  });
