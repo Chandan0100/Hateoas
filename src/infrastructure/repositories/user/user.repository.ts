@@ -9,7 +9,7 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  public async createUser(payload: AddUser,transaction = null): Promise<AddUser> {
+  public async createUser(payload: AddUser,transaction = null): Promise<User> {
     if (transaction) {
       return await transaction.save(User, payload);
     }

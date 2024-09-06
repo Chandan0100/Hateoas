@@ -7,27 +7,27 @@ import {
   Res,
   ValidationPipe,
 } from '@nestjs/common';
-import { GetUserServiceHandler } from './get-user.service';
-import { GetUserCommand } from './get-user.dto';
 import { Request, Response } from 'express';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
+import { GetProductCommand } from './get-product.dto';
+import { GetProductHandler } from './get-product.service';
 
-@Controller('get-user')
-export class GetUserController {
-  constructor(private readonly getUserService: GetUserServiceHandler) {}
+@Controller('get-product')
+export class GetProductController {
+  constructor(private readonly getProductService: GetProductHandler) {}
 
   @Get()
   public async handle(
     @Req() req: Request,
     @Res() res: Response,
-    @Query(new ValidationPipe({ transform: true })) query: GetUserCommand,
+    @Query(new ValidationPipe({ transform: true })) query: GetProductCommand,
   ) {
     try {
-      const response = await this.getUserService.handle(query);
+      const response = await this.getProductService.handle(query);
       if (!response) {
         return res
           .status(HttpStatus.NOT_FOUND)
-          .json({ message: 'No user found' });
+          .json({ message: 'No product found' });
       }
       return res.status(HttpStatus.OK).json(response);
     } catch (error) {

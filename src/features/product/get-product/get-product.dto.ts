@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class GetUserCommand {
+export class GetProductCommand {
   @IsNotEmpty()
   uuid: string;
 }

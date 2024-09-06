@@ -6,19 +6,19 @@ import { AddUserServiceHandler } from './add-user/add-user.service';
 import { GetUserController } from './get-user/get-user.controller';
 import { GetUserServiceHandler } from './get-user/get-user.service';
 import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
+import { GetProductsHandler } from '../product/list-product/list-product.service';
+import { ProductRepository } from 'src/infrastructure/repositories/product/product.repository';
 
 @Module({
   imports: [],
-  controllers: [
-    DeleteUserController,
-    AddUserController, 
-    GetUserController
-  ],
+  controllers: [DeleteUserController, AddUserController, GetUserController],
   providers: [
-    DeleteUserServiceHandler, 
-    AddUserServiceHandler, 
+    DeleteUserServiceHandler,
+    AddUserServiceHandler,
     GetUserServiceHandler,
-    UserRepository
+    UserRepository,
+    GetProductsHandler,
+    ProductRepository
   ],
 })
 export class UserModule {}
