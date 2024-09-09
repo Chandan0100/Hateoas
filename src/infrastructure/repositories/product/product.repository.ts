@@ -48,8 +48,8 @@ export class ProductRepository extends Repository<Product> {
     if (payload.user_id) {
       return await query
         .where('product.user_id = :user_id', { user_id: payload.user_id })
-        .getMany();
+        .getManyAndCount();
     }
-    return await query.limit(payload.limit).offset(payload.page).getMany();
+    return await query.limit(payload.limit).offset(payload.page).getManyAndCount();
   }
 }
