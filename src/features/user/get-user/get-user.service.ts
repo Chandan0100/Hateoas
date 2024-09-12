@@ -10,9 +10,9 @@ export class GetUserServiceHandler {
     private readonly productService: GetProductsHandler,
   ) {}
 
-  public async handle(payload: GetUser) {
+  public async handle(uuid: string) {
     try {
-      const user = await this.userRepository.getUserByUUID(payload.uuid);
+      const user = await this.userRepository.getUserByUUID(uuid);
       if (!user) return;
       const products = await this.productService.handle({
         user_id: user.uuid,
@@ -24,21 +24,21 @@ export class GetUserServiceHandler {
           href: `/get-user/?${user.uuid}`,
         },
         update_user: {
-          operation_id: 'update-user',
+          title: 'update-user',
           href: `/update-user?${user.uuid}`,
           method: 'PUT',
         },
         delete_user: {
-          operation_id: 'delete-user',
+          title: 'delete-user',
           href: `/delete-user?${user.uuid}`,
           method: 'DELETE',
         },
       };
 
-      response['_embedded'] = {
-        products: products.products,
-        add_product: products._embedded.add_product,
-      };
+      // response['_embedded'] = {
+      //   products: products.products,
+      //   add_product: products._embedded.add_product,
+      // };
       return response;
     } catch (error) {
       throw error;

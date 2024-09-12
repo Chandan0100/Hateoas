@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Param,
   Query,
   Req,
   Res,
@@ -20,10 +21,11 @@ export class GetUserController {
   public async handle(
     @Req() req: Request,
     @Res() res: Response,
-    @Query(new ValidationPipe({ transform: true })) query: GetUserCommand,
+    @Param() params: GetUserCommand,
   ) {
     try {
-      const response = await this.getUserService.handle(query);
+      const { uuid } = params;
+      const response = await this.getUserService.handle(uuid);
       if (!response) {
         return res
           .status(HttpStatus.NOT_FOUND)

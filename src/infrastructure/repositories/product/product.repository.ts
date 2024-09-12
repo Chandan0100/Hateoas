@@ -17,7 +17,7 @@ export class ProductRepository extends Repository<Product> {
   ): Promise<Product> {
     return await this.save(payload);
   }
-  async getProductByUUID(uuid: string): Promise<Product | undefined> {
+  async getProductByUUID(uuid: string) {
     return await this.createQueryBuilder('product')
       .where('product.uuid = :uuid', { uuid })
       .leftJoinAndMapOne(
@@ -50,6 +50,9 @@ export class ProductRepository extends Repository<Product> {
         .where('product.user_id = :user_id', { user_id: payload.user_id })
         .getManyAndCount();
     }
-    return await query.limit(payload.limit).offset(payload.page).getManyAndCount();
+    return await query
+      .limit(payload.limit)
+      .offset(payload.page)
+      .getManyAndCount();
   }
 }

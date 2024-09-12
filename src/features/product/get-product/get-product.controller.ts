@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Query,
-  Req,
-  Res,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 import { GetProductCommand } from './get-product.dto';
@@ -16,14 +8,15 @@ import { GetProductHandler } from './get-product.service';
 export class GetProductController {
   constructor(private readonly getProductService: GetProductHandler) {}
 
-  @Get()
+  @Get(':uuid')
   public async handle(
     @Req() req: Request,
     @Res() res: Response,
-    @Query(new ValidationPipe({ transform: true })) query: GetProductCommand,
+    @Param() params: GetProductCommand,
   ) {
     try {
-      const response = await this.getProductService.handle(query);
+      const { uuid } = params;
+      const response = await this.getProductService.handle(uuid);
       if (!response) {
         return res
           .status(HttpStatus.NOT_FOUND)

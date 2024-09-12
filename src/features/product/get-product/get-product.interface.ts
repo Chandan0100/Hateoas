@@ -1,3 +1,3 @@
-export class GetProduct {
+export interface GetProduct {
   uuid: string;
 }

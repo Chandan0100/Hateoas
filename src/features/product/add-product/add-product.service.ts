@@ -14,7 +14,7 @@ export class AddProductHandler {
     try {
       const product =
         await this.productRepository.createProduct(productPayload);
-      let data = await this.getProductService.handle({ uuid: product.uuid });
+      let data = await this.getProductService.handle(product.uuid);
       return data;
     } catch (error) {
       throw error;
