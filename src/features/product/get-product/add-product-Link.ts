@@ -1,6 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
-import { GetProductsHandler } from 'src/features/product/list-product/list-product.service';
+import { Injectable } from '@nestjs/common';
 import { HALLink } from './HAL.interface';
 
 @Injectable()
@@ -14,23 +12,23 @@ export class AddProductLinkService<T> {
     return this.data;
   }
 
-  public addLink(rel: string, obj: string | HALLink) {
-    if (typeof obj === 'string') {
-      obj = { href: obj };
+  public addLink(rel: string, linkObject: string | HALLink) {
+    if (typeof linkObject === 'string') {
+      linkObject = { href: linkObject };
     }
     this.data = {
       ...this.data,
-      _links: { ...this.data['_links'], [rel]: obj },
+      _links: { ...this.data['_links'], [rel]: linkObject },
     };
     return this;
   }
 
   public addEmbedded(
     obj1: { field: string; rel: string },
-    obj: string | HALLink,
+    linkObject: string | HALLink,
   ) {
-    if (typeof obj === 'string') {
-      obj = { href: obj };
+    if (typeof linkObject === 'string') {
+      linkObject = { href: linkObject };
     }
     if (!this.data[obj1.field]) {
       throw new Error(`field '${obj1.field}' doesn't exits on resource`);
@@ -39,17 +37,17 @@ export class AddProductLinkService<T> {
       ...this.data,
       _embedded: {
         ...this.data['_embedded'],
-        [obj1.field]: obj.href
+        [obj1.field]: linkObject.href
           ? {
               ...this.data[obj1.field],
               _link: {
-                [obj1.rel]: obj,
+                [obj1.rel]: linkObject,
               },
             }
-          : this.data[obj1.field].map((ele:any) => ({
+          : this.data[obj1.field].map((ele: any) => ({
               ...ele,
               _link: {
-                [obj1.rel]: obj,
+                [obj1.rel]: linkObject,
               },
             })),
       },

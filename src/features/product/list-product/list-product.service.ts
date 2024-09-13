@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { GetProduct } from './list-product.interface';
 import { ProductRepository } from 'src/infrastructure/repositories/product/product.repository';
-import { AddProductLinkService } from '../get-product/addproductLink.link';
+import { AddProductLinkService } from '../get-product/add-product-Link';
+import { ListProductLinkService } from './list-product-links';
 
 @Injectable()
 export class GetProductsHandler {
@@ -12,21 +13,23 @@ export class GetProductsHandler {
       const query = { ...payload };
       query.limit = payload.limit ?? 10;
       query.page = payload.page ? payload.limit * (payload.page - 1) : 0;
-      const product = await this.productRepository.getAllProduct(payload);
+      const products = await this.productRepository.getAllProduct(payload);
 
-      const response = new AddProductLinkService({ product : ...product[0] });
+      const response = new ListProductLinkService(products);
 
       return response
-        .addEmbedded(
+        .addCollection('products', [
           {
-            field: 'product',
             rel: 'self',
+            href: 'sdsad',
           },
           {
-            href: `/get-product`,
-            append: 'uuid',
+            rel: 'delete-product',
+            href: 'sdasdsa',
+            queryParams: ['page', 'limit'],
+            paramField:['uuid','_links.self.href']
           },
-        )
+        ])
         .getData();
       // const response = {
       //   total: product[1],

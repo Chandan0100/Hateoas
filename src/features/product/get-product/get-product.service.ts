@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
-import { GetProduct } from './get-product.interface';
-import halson from 'halson';
 import { ProductRepository } from 'src/infrastructure/repositories/product/product.repository';
-import { AddProductLinkService } from './addproductLink.link';
+import { AddProductLinkService } from './add-product-Link';
 
 @Injectable()
 export class GetProductHandler {
