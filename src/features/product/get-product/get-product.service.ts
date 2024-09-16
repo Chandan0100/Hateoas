@@ -9,9 +9,16 @@ export class GetProductHandler {
   public async handle(uuid: string): Promise<any> {
     try {
       const product = await this.productRepository.getProductByUUID(uuid);
+
+      product['user'] = new AddProductLinkService(product['user'])
+        .addLink('self', {
+          href: `/get-user/${product['user'].uuid}`,
+        })
+        .getData();
+
       const response = new AddProductLinkService(product);
       return response
-        .addLink('self', `/get-product/${product.uuid}`)
+        .addLink('self', { href: `/get-product/${product.uuid}` })
         .addLink('update_product', {
           title: 'update-product',
           href: `/update-product/${product.uuid}`,
@@ -22,10 +29,7 @@ export class GetProductHandler {
           href: `/delete-product/${product.uuid}`,
           method: 'DELETE',
         })
-        .addEmbedded(
-          { field: 'user', rel: 'self' },
-          `/get-user/${product['user'].uuid}`,
-        )
+        .addEmbedded({ field: 'user', rel: 'getUser' })
         .getData();
     } catch (error) {
       throw error;

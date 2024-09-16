@@ -17,24 +17,13 @@ export class ListProductLinkService<T> {
     return this.data;
   }
 
-  public addCollection(alias: string, linkObject: CustomHALLink[]) {
+  public addCollection(alias: string, linkObject: CustomHALLink) {
+    const { rel, ...others } = linkObject;
     this.data = {
       [alias]: this.data[0].map((ele) => ({
         ...ele,
         _links: {
-          ...linkObject.reduce((acc, obj) => {
-            const { rel, queryParams, paramField, href, ...rest } = obj;
-            const paramsString = this.handleParamsFields(ele, paramField);
-
-            acc[rel] = {
-              ...rest,
-              href: `${href}/${paramsString}${queryParams?.length ? [`{?${queryParams.join(',')}}`] : ''}`,
-              ...(queryParams?.length && {
-                templated: true,
-              }),
-            };
-            return acc;
-          }, {}),
+          [rel]: others,
         },
       })),
       count: this.data[1],
@@ -50,7 +39,8 @@ export class ListProductLinkService<T> {
     };
 
     const createParamString = (object, fields) => {
-      return fields?.map((field) => {
+      return fields
+        ?.map((field) => {
           const value = getNestedValue(object, field);
           return value !== undefined
             ? `${field}=${encodeURIComponent(value)}`

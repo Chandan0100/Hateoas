@@ -12,47 +12,25 @@ export class AddProductLinkService<T> {
     return this.data;
   }
 
-  public addLink(rel: string, linkObject: string | HALLink) {
-    if (typeof linkObject === 'string') {
-      linkObject = { href: linkObject };
-    }
-    this.data = {
-      ...this.data,
-      _links: { ...this.data['_links'], [rel]: linkObject },
+  public addLink(rel: string, HALLinkObject: HALLink) {
+
+    this.data['_links'] = { 
+      ...this.data['_links'],
+      [rel]: HALLinkObject 
     };
+
     return this;
   }
 
-  public addEmbedded(
-    obj1: { field: string; rel: string },
-    linkObject: string | HALLink,
-  ) {
-    if (typeof linkObject === 'string') {
-      linkObject = { href: linkObject };
+  public addEmbedded({ field, rel }: { field: string; rel: string }) {
+    if (!this.data[field]) {
+      throw new Error(`field '${field}' doesn't exits on resource`);
     }
-    if (!this.data[obj1.field]) {
-      throw new Error(`field '${obj1.field}' doesn't exits on resource`);
-    }
-    this.data = {
-      ...this.data,
-      _embedded: {
-        ...this.data['_embedded'],
-        [obj1.field]: linkObject.href
-          ? {
-              ...this.data[obj1.field],
-              _link: {
-                [obj1.rel]: linkObject,
-              },
-            }
-          : this.data[obj1.field].map((ele: any) => ({
-              ...ele,
-              _link: {
-                [obj1.rel]: linkObject,
-              },
-            })),
-      },
+    this.data['_embedded'] = {
+      ...this.data['_embedded'],
+      [rel]: this.data[field],
     };
-    this.data[obj1.field] = undefined;
+    delete this.data[field];
     return this;
   }
 }

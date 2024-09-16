@@ -15,21 +15,21 @@ export class GetProductsHandler {
       query.page = payload.page ? payload.limit * (payload.page - 1) : 0;
       const products = await this.productRepository.getAllProduct(payload);
 
-      const response = new ListProductLinkService(products);
+      const addProductLinks = {
+        products: products[0].map((product) => {
+          const productWithLinks = new AddProductLinkService(product);
+          return productWithLinks
+            .addLink('self', { href: `/product/${product.uuid}` })
+            .getData();
+        }),
+        count: products[1],
+      };
+
+      const response = new AddProductLinkService(addProductLinks);
 
       return response
-        .addCollection('products', [
-          {
-            rel: 'self',
-            href: 'sdsad',
-          },
-          {
-            rel: 'delete-product',
-            href: 'sdasdsa',
-            queryParams: ['page', 'limit'],
-            paramField:['uuid','_links.self.href']
-          },
-        ])
+        .addLink('next', { href: 'abcde' })
+        .addEmbedded({ field: 'products', rel: 'products' })
         .getData();
       // const response = {
       //   total: product[1],

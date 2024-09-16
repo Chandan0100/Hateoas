@@ -1,19 +1,10 @@
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Param,
-  Query,
-  Req,
-  Res,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
 import { GetUserServiceHandler } from './get-user.service';
 import { GetUserCommand } from './get-user.dto';
 import { Request, Response } from 'express';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 
-@Controller('get-user')
+@Controller('get-user/:uuid')
 export class GetUserController {
   constructor(private readonly getUserService: GetUserServiceHandler) {}
 
@@ -25,6 +16,7 @@ export class GetUserController {
   ) {
     try {
       const { uuid } = params;
+      console.log(uuid);
       const response = await this.getUserService.handle(uuid);
       if (!response) {
         return res
