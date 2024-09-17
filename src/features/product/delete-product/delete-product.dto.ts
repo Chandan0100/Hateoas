@@ -1,8 +1,6 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty } from 'class-validator';
 
 export class DeleteProductCommand {
-
-    @IsNotEmpty()
-    uuid : string
-
+  @IsNotEmpty()
+  uuid: string;
 }

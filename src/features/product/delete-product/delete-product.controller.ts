@@ -1,24 +1,37 @@
-import { Controller, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  HttpStatus,
+  Param,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 import { Request, Response } from 'express';
 import { DeleteProductServiceHandler } from './delete-product.service';
 import { DeleteProductCommand } from './delete-product.dto';
 
-@Controller('delete-product')
+@Controller('delete-product/:uuid')
 export class DeleteProductController {
   constructor(
     private readonly deleteProductService: DeleteProductServiceHandler,
   ) {}
 
-  @Post()
+  @Delete()
   public async handle(
     @Req() req: Request,
     @Res() res: Response,
-    @Query() query: DeleteProductCommand,
+    @Param() params: DeleteProductCommand,
   ) {
     try {
-      const response = await this.deleteProductService.handle(query);
-      return res.status(HttpStatus.OK).json(response);
+      const { uuid } = params;
+      const response = await this.deleteProductService.handle(uuid);
+      if (response?.affected) {
+        return res.status(HttpStatus.OK).json(response);
+      }
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ message: 'No product found' });
     } catch (error) {
       console.log('Error during deleting product details', error);
       return handleError(res, error);

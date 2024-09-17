@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { HALLink } from './HAL.interface';
+import { HALLink } from 'src/features/product/get-product/HAL.interface';
 
 @Injectable()
-export class AddProductLinkService<T> {
+export class AddHypermediaLinks<T> {
   data: T;
   constructor(data: T) {
     this.data = data;
@@ -13,10 +13,9 @@ export class AddProductLinkService<T> {
   }
 
   public addLink(rel: string, HALLinkObject: HALLink) {
-
-    this.data['_links'] = { 
+    this.data['_links'] = {
       ...this.data['_links'],
-      [rel]: HALLinkObject 
+      [rel]: HALLinkObject,
     };
 
     return this;

@@ -21,8 +21,8 @@ import { GetProductHandler } from './get-product/get-product.service';
     GetProductController,
   ],
   providers: [
-    AddProductHandler,
     DeleteProductServiceHandler,
+    AddProductHandler,
     GetProductsHandler,
     UpdateProductService,
     GetProductHandler,

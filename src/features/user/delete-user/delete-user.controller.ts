@@ -1,27 +1,26 @@
-import { Controller, HttpStatus, Post, Query, Req, Res } from '@nestjs/common';
+import { Controller, HttpStatus, Param, Post, Req, Res } from '@nestjs/common';
 import { DeleteUserServiceHandler } from './delete-user.service';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 import { Request, Response } from 'express';
 import { DeleteUserCommand } from './delete-user.dto';
 
-@Controller('delete-user')
+@Controller('delete-user/:uuid')
 export class DeleteUserController {
-  constructor(private readonly deleteUserService: DeleteUserServiceHandler) {}
+  constructor(private readonly deleteUserHandler: DeleteUserServiceHandler) {}
 
-  @Post() 
+  @Post()
   public async handle(
-    @Req() req: Request, 
-    @Res() res :Response,
-    @Query() query : DeleteUserCommand
+    @Req() req: Request,
+    @Res() res: Response,
+    @Param() params: DeleteUserCommand,
   ) {
     try {
-      const response = await this
+      const { uuid } = params;
+      const response = await this.deleteUserHandler.handle(uuid);
       return res.status(HttpStatus.OK).json(response);
-    }
-    catch(error) {
-      console.log('Error during adding personal details', error);
+    } catch (error) {
+      console.log('Error deleting details', error);
       return handleError(res, error);
     }
-
   }
 }

@@ -1,4 +1,13 @@
-import { Controller, Get, HttpStatus, Query, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Query,
+  Req,
+  Res,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { Request, Response } from 'express';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
@@ -10,6 +19,7 @@ export class GetAllProductController {
   constructor(private readonly getProductService: GetProductsHandler) {}
 
   @Get()
+  @UsePipes(new ValidationPipe({ transform: true }))
   public async handle(
     @Req() req: Request,
     @Res() res: Response,

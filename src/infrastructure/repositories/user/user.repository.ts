@@ -9,18 +9,27 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  public async createUser(payload: AddUser,transaction = null): Promise<User> {
+  public async createUser(payload: AddUser, transaction = null): Promise<User> {
     if (transaction) {
       return await transaction.save(User, payload);
     }
     return await this.save(payload);
   }
-  async getUserByEmailOrUUID(email: string, uuid: string): Promise<User | undefined> {
+  async getUserByEmailOrUUID(
+    email: string,
+    uuid: string,
+  ): Promise<User | undefined> {
     return await this.createQueryBuilder('user')
       .where('user.email = :email OR user.uuid = :uuid', { email, uuid })
       .getOne();
   }
   async getUserByUUID(uuid: string): Promise<User> {
     return await this.findOne({ where: { uuid } });
+  }
+
+  async deleteUser(uuid: string) {
+    return this.createQueryBuilder('user')
+      .where('user.uuid = :uuid', { uuid })
+      .delete();
   }
 }

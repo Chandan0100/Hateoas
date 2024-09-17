@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Response } from 'express';
-import { QueryFailedError } from 'typeorm';
 
 export class InternalServerException extends HttpException {
   constructor(message: string = 'Internal Server Error' , status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR) {

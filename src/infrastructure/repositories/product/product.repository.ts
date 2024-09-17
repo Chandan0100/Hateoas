@@ -11,10 +11,7 @@ export class ProductRepository extends Repository<Product> {
     super(Product, dataSource.createEntityManager());
   }
 
-  public async createProduct(
-    payload: AddProduct,
-    transaction = null,
-  ): Promise<Product> {
+  public async createProduct(payload: AddProduct): Promise<Product> {
     return await this.save(payload);
   }
   async getProductByUUID(uuid: string) {
@@ -52,7 +49,7 @@ export class ProductRepository extends Repository<Product> {
     }
     return await query
       .limit(payload.limit)
-      .offset(payload.page)
+      .offset(payload.offset)
       .getManyAndCount();
   }
 }
