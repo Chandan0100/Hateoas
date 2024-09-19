@@ -14,6 +14,7 @@ import { UpdateUserHypermediaRelations } from './update-user/update-user-hyperme
 import { GetAllUsersController } from './get-all-users/get-all-users.controller';
 import { GetAllUsersHandler } from './get-all-users/get-all-users.service';
 import { GetAllUsersHypermediaRelations } from './get-all-users/get-all-users-hypermedia-relations';
+import { DeleteUserHypermediaRelations } from './delete-user/delete-user-hypermedia-relations';
 @Module({
   imports: [],
   controllers: [DeleteUserController, AddUserController, GetUserController, GetAllUsersController],
@@ -28,7 +29,8 @@ import { GetAllUsersHypermediaRelations } from './get-all-users/get-all-users-hy
     AddUserHypermediaRelations,
     GetUserHypermediaRelations,
     UpdateUserHypermediaRelations,
-    GetAllUsersHypermediaRelations
+    GetAllUsersHypermediaRelations,
+    DeleteUserHypermediaRelations
   ],
 })
 export class UserModule {}

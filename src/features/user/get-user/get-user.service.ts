@@ -25,7 +25,8 @@ export class GetUserHandler {
       const response = new AddHypermediaLinks(user);
       return response
         .addLink(this.getUserHyperMediaRealtions.self,{
-          href: `/users/?${user.uuid}`
+          href: `/users/?${user.uuid}`,
+          method: 'GET',
         })
         .addLink(this.getUserHyperMediaRealtions.updateUser,{
           href: `/users/${user.uuid}`,

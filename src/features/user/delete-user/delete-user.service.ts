@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
+import { DeleteUserHypermediaRelations } from './delete-user-hypermedia-relations';
+import { AddHypermediaLinks } from 'src/infrastructure/common/add-hypermedia-links';
 
 @Injectable()
 export class DeleteUserHandler {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly deleteUserHypermediaRelations: DeleteUserHypermediaRelations
+  ) {}
 
   public async handle(uuid: string) {
-    return await this.userRepository.deleteUserByUuid(uuid);
+    const user = await this.userRepository.deleteUserByUuid(uuid);
+    const response =  new AddHypermediaLinks(user);
+    return response
+      .addLink(this.deleteUserHypermediaRelations.self, {
+        href: `/users/?${uuid}`,
+      })
+      .addLink(this.deleteUserHypermediaRelations.getFind, {
+        href: `/users/{?userId,page,limit}`,
+        templated: true,
+        method: 'GET',
+    })
   }
 }

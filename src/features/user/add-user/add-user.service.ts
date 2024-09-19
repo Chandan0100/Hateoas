@@ -17,7 +17,7 @@ export class AddUserHandler {
     return response
       .addLink(this.addUserHyperMediaRelations.self, {
         href: `/users/${user.uuid}`,
-        method: 'GET',
+        method: 'POST',
       })
       .addLink(this.addUserHyperMediaRelations.deleteUser, {
         href: `users/${user.uuid}`,
@@ -26,6 +26,11 @@ export class AddUserHandler {
       .addLink(this.addUserHyperMediaRelations.updateUser, {
         href: `users/${user.uuid}`,
         method: 'PATCH',
+      })
+      .addLink(this.addUserHyperMediaRelations.getFind, {
+        href: `/users/{?userId,page,limit}`,
+        templated: true,
+        method: 'GET',
       })
       .getData();
   }

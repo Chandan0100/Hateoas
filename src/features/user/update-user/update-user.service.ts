@@ -19,11 +19,16 @@ export class UpdateUserHandler {
             return response
             .addLink(this.updateUserHypermediaRelations.self, {
               href: `/users/${user.uuid}`,
-              method: 'GET'
+              method: 'PATCH'
             })
             .addLink(this.updateUserHypermediaRelations.deleteUser, {
               href: `users/${user.uuid}`,
               method:'DELETE'
+            })
+            .addLink(this.updateUserHypermediaRelations.getFind, {
+                href: `/users/{?userId,page,limit}`,
+                templated: true,
+                method: 'GET',
             })
             .getData();
         }
