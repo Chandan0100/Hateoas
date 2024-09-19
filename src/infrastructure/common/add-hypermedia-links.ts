@@ -22,9 +22,9 @@ export class AddHypermediaLinks<T> {
   }
 
   public addEmbedded({ field, rel }: { field: string; rel: string }) {
-    if (!this.data[field]) {
-      throw new Error(`field '${field}' doesn't exits on resource`);
-    }
+    // if (!this.data[field]) {
+    //   throw new Error(`field '${field}' doesn't exits on resource`);
+    // }
     this.data['_embedded'] = {
       ...this.data['_embedded'],
       [rel]: this.data[field],

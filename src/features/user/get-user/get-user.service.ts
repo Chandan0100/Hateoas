@@ -1,45 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from 'src/infrastructure/repositories/user/user.repository';
-import { GetUser } from './get-user.interface';
 import { GetProductsHandler } from 'src/features/product/list-product/list-product.service';
+import { GetUserCommand } from './get-user.dto';
+import { AddHypermediaLinks } from 'src/infrastructure/common/add-hypermedia-links';
+import { GetUserHypermediaRelations } from './get-user-hypermedia-relations';
 
 @Injectable()
-export class GetUserServiceHandler {
+export class GetUserHandler {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly productService: GetProductsHandler,
+    private readonly getUserHyperMediaRealtions: GetUserHypermediaRelations
   ) {}
 
-  public async handle(uuid: string) {
+  public async handle(params:GetUserCommand) {
     try {
+      const { uuid } = params;
       const user = await this.userRepository.getUserByUUID(uuid);
       if (!user) return;
-      const products = await this.productService.handle({
-        user_id: user.uuid,
-      });
+      // const products = await this.productService.handle({
+      //   user_id: user.uuid,
+      // });
 
-      const response = user;
-      response['_links'] = {
-        self: {
-          href: `/get-user/?${user.uuid}`,
-        },
-        update_user: {
-          title: 'update-user',
-          href: `/update-user?${user.uuid}`,
-          method: 'PUT',
-        },
-        delete_user: {
-          title: 'delete-user',
-          href: `/delete-user?${user.uuid}`,
+      const response = new AddHypermediaLinks(user);
+      return response
+        .addLink(this.getUserHyperMediaRealtions.self,{
+          href: `/users/?${user.uuid}`
+        })
+        .addLink(this.getUserHyperMediaRealtions.updateUser,{
+          href: `/users/${user.uuid}`,
+          method: 'PATCH',
+        })
+        .addLink(this.getUserHyperMediaRealtions.deleteUser, {
+          href: `/users/${user.uuid}`,
           method: 'DELETE',
-        },
-      };
-
-      // response['_embedded'] = {
-      //   products: products.products,
-      //   add_product: products._embedded.add_product,
-      // };
-      return response;
+        })
     } catch (error) {
       throw error;
     }

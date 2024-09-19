@@ -1,16 +1,15 @@
-import { Controller, HttpStatus, Param, Post, Req, Res } from '@nestjs/common';
-import { DeleteUserServiceHandler } from './delete-user.service';
+import { Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { DeleteUserHandler } from './delete-user.service';
 import { handleError } from 'src/infrastructure/exceptions/custom-exception';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { DeleteUserCommand } from './delete-user.dto';
 
-@Controller('delete-user/:uuid')
+@Controller('users/:uuid')
 export class DeleteUserController {
-  constructor(private readonly deleteUserHandler: DeleteUserServiceHandler) {}
+  constructor(private readonly deleteUserHandler: DeleteUserHandler) {}
 
   @Post()
   public async handle(
-    @Req() req: Request,
     @Res() res: Response,
     @Param() params: DeleteUserCommand,
   ) {

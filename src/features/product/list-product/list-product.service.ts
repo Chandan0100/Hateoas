@@ -28,7 +28,7 @@ export class GetProductsHandler {
       }),
       count: products[1],
     };
-
+    
     const response = new AddHypermediaLinks(addProductLinks);
 
     if (query.page < totalPages) {
