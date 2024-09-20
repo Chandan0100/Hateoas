@@ -18,7 +18,7 @@ export class Product {
   name: string;
 
   @ManyToOne(() => User, (user) => user.uuid, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'uuid' })
   user_id: User;
 
   @Column({ type: 'varchar', length: 50, nullable: true })
@@ -32,4 +32,12 @@ export class Product {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+  getLinks() {
+    return {
+      self: {
+        href: `/products/${this.uuid}`,
+      },
+    };
+  }
 }

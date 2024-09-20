@@ -6,7 +6,6 @@ export class DeleteProductServiceHandler {
   constructor(private readonly productRepository: ProductRepository) {}
 
   public async handle(uuid: string) {
-    const product = await this.productRepository.deleteProductByUUID(uuid);
-    return product;
+    return this.productRepository.deleteProductByUUID(uuid);
   }
 }

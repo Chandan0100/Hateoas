@@ -22,22 +22,29 @@ export class UserRepository extends Repository<User> {
     return await this.findOne({ where: { uuid } });
   }
 
-  public async getAllUsers({ userId, page, limit }: GetAllUsersQuery): Promise<User[]> {
+  public async getAllUsers({
+    userId,
+    page,
+    limit,
+  }: GetAllUsersQuery): Promise<User[]> {
     const skip = page && (page - 1) * limit;
 
     return await this.find({
       where: { uuid: userId },
       skip,
-      take: limit,         
+      take: limit,
     });
   }
 
-  public async updateUserByUuid(uuid:string, payload:UpdateUser): Promise<User> {
-    await this.update({uuid}, payload)
+  public async updateUserByUuid(
+    uuid: string,
+    payload: UpdateUser,
+  ): Promise<User> {
+    await this.update({ uuid }, payload);
     const user = await this.findOne({ where: { uuid } });
     return user;
   }
-  
+
   public async deleteUserByUuid(uuid: string) {
     return this.createQueryBuilder('user')
       .where('user.uuid = :uuid', { uuid })

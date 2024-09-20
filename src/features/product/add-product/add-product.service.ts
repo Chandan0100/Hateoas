@@ -12,6 +12,6 @@ export class AddProductHandler {
 
   public async handle(productPayload: AddProduct) {
     const product = await this.productRepository.createProduct(productPayload);
-    return await this.getProductService.handle(product.uuid);
+    return this.getProductService.handle(product.uuid);
   }
 }

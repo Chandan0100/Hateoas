@@ -1,31 +1,24 @@
-import { Controller, Get, HttpStatus, Param, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
-import { handleError } from 'src/infrastructure/exceptions/custom-exception';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GetProductCommand } from './get-product.dto';
 import { GetProductHandler } from './get-product.service';
+import { GetProductInterceptor } from './get-product.interceptor';
 
-@Controller('get-product')
+@Controller()
 export class GetProductController {
   constructor(private readonly getProductService: GetProductHandler) {}
 
-  @Get(':uuid')
-  public async handle(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Param() params: GetProductCommand,
-  ) {
-    try {
-      const { uuid } = params;
-      const response = await this.getProductService.handle(uuid);
-      if (!response) {
-        return res
-          .status(HttpStatus.NOT_FOUND)
-          .json({ message: 'No product found' });
-      }
-      return res.status(HttpStatus.OK).json(response);
-    } catch (error) {
-      console.log('Error during adding personal details', error);
-      return handleError(res, error);
-    }
+  @Get('products/:uuid')
+  @UseInterceptors(new GetProductInterceptor())
+  public async handle(@Param() params: GetProductCommand) {
+    const { uuid } = params;
+    const data = await this.getProductService.handle(uuid);
+    if (!data) throw new NotFoundException('Product not found');
+    return data;
   }
 }

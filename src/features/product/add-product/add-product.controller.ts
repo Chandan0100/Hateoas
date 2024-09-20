@@ -1,26 +1,16 @@
-import { Body, Controller, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
 
-import { handleError } from 'src/infrastructure/exceptions/custom-exception';
 import { AddProductHandler } from './add-product.service';
 import { AddProductCommand } from './add-product.dto';
+import { AddProductInterceptor } from './add-product.interceptor';
 
-@Controller('add-product')
+@Controller()
 export class AddProductController {
   constructor(private readonly addProductService: AddProductHandler) {}
 
-  @Post()
-  public async handle(
-    @Req() req: Request,
-    @Res() res: Response,
-    @Body() body: AddProductCommand,
-  ) {
-    try {
-      const response = await this.addProductService.handle(body);
-      return res.status(HttpStatus.OK).json(response);
-    } catch (error) {
-      console.log('Error during adding product details', error);
-      return handleError(res, error);
-    }
+  @Post('products')
+  @UseInterceptors(new AddProductInterceptor())
+  public async handle(@Body() body: AddProductCommand) {
+    return this.addProductService.handle(body);
   }
 }
