@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { AddUser } from './add-user.interface';
 import { AddHypermediaLinks } from 'src/infrastructure/common/add-hypermedia-links';
 import { AddUserHypermediaRelations } from './add-user-hypermedia-relations';
+import { httpMethods } from 'src/infrastructure/common/constant';
 
 @Injectable()
 export class AddUserHandler {
@@ -17,20 +18,20 @@ export class AddUserHandler {
     return response
       .addLink(this.addUserHyperMediaRelations.self, {
         href: `/users/${user.uuid}`,
-        method: 'POST',
+        method: httpMethods.POST,
       })
       .addLink(this.addUserHyperMediaRelations.deleteUser, {
         href: `users/${user.uuid}`,
-        method: 'DELETE',
+        method: httpMethods.DELETE,
       })
       .addLink(this.addUserHyperMediaRelations.updateUser, {
         href: `users/${user.uuid}`,
-        method: 'PATCH',
+        method: httpMethods.PATCH,
       })
       .addLink(this.addUserHyperMediaRelations.getFind, {
         href: `/users/{?userId,page,limit}`,
         templated: true,
-        method: 'GET',
+        method: httpMethods.GET,
       })
       .getData();
   }

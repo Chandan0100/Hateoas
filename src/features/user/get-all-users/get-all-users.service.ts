@@ -3,6 +3,7 @@ import { UserRepository } from 'src/infrastructure/repositories/user/user.reposi
 import { AddHypermediaLinks } from 'src/infrastructure/common/add-hypermedia-links';
 import { GetAllUsersHypermediaRelations } from './get-all-users-hypermedia-relations';
 import { GetAllUsersQuery } from './get-al-users.interface';
+import { httpMethods } from 'src/infrastructure/common/constant';
 
 @Injectable()
 export class GetAllUsersHandler {
@@ -28,11 +29,11 @@ export class GetAllUsersHandler {
             })
             .addLink(this.getAllUsersHypermediaRelations.updateUser, {
               href: `/users/${user.uuid}`,
-              method: 'PATCH',
+              method: httpMethods.PATCH,
             })
             .addLink(this.getAllUsersHypermediaRelations.deleteUser, {
               href: `/users/${user.uuid}`,
-              method: 'DELETE',
+              method: httpMethods.DELETE,
             })
             .getData();
         }),
@@ -41,21 +42,22 @@ export class GetAllUsersHandler {
       if (page > 1) {
         links.addLink(this.getAllUsersHypermediaRelations.getPrev, {
           href: `/users?${page - 1}`,
-          method: 'GET',
+          method: httpMethods.GET,
         });
       }
       links
         .addLink(this.getAllUsersHypermediaRelations.self, {
           href: `/users?page=${page}&limit=${limit}`,
+          method: httpMethods.GET,
         })
         .addLink(this.getAllUsersHypermediaRelations.getFind, {
           href: `/users/{?userId,page,limit}`,
           templated: true,
-          method: 'GET',
+          method: httpMethods.GET,
         })
         .addLink(this.getAllUsersHypermediaRelations.getNext, {
           href: `/users?${page + 1}`,
-          method: 'GET',
+          method: httpMethods.GET,
         });
       links.addEmbedded({ field: 'users', rel: 'users' });
       return { ...links.getData(), page, limit, total: users.length };

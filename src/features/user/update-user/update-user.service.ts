@@ -4,6 +4,7 @@ import { UpdateParamCommand, UpdatePayloadCommand } from './update-user.dto';
 import { UpdateUserHypermediaRelations } from './update-user-hypermedia-relations';
 import { AddHypermediaLinks } from 'src/infrastructure/common/add-hypermedia-links';
 import { UpdateUser } from './update-user.interface';
+import { httpMethods } from 'src/infrastructure/common/constant';
 
 @Injectable()
 export class UpdateUserHandler {
@@ -19,16 +20,16 @@ export class UpdateUserHandler {
             return response
             .addLink(this.updateUserHypermediaRelations.self, {
               href: `/users/${user.uuid}`,
-              method: 'PATCH'
+              method: httpMethods.PATCH
             })
             .addLink(this.updateUserHypermediaRelations.deleteUser, {
               href: `users/${user.uuid}`,
-              method:'DELETE'
+              method: httpMethods.DELETE
             })
             .addLink(this.updateUserHypermediaRelations.getFind, {
                 href: `/users/{?userId,page,limit}`,
                 templated: true,
-                method: 'GET',
+                method: httpMethods.GET,
             })
             .getData();
         }

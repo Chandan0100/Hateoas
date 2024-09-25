@@ -1,7 +1,7 @@
 export class HALLink {
   href: string;
   title?: string;
-  method?: 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
+  method?: string;
   templated?: boolean;
   name?: string;
   append?: string;
