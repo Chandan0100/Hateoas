@@ -1,15 +1,16 @@
 import { HypermediaLink } from 'src/domain/common/link';
 import { ListProductCommand } from 'src/features/product/list-product/list-product.dto';
+import { httpMethods } from 'src/infrastructure/common/constant';
 
 export class AddProductLink extends HypermediaLink {
   constructor() {
-    super('add-product', '/products', 'POST');
+    super('add-product', '/products', httpMethods.POST);
   }
 }
 
 export class GetProductLink extends HypermediaLink {
   constructor(params: string = '{?uuid}') {
-    super('self', `/products/${params}`, 'GET');
+    super('self', `/products/${params}`, httpMethods.GET);
   }
 }
 
@@ -19,13 +20,13 @@ export class ListProductLink extends HypermediaLink {
     super(
       'list-product',
       `/products?page=${page}&limit=${limit}${user_id ? `&user_id=${user_id}` : ''}`,
-      'GET',
+      httpMethods.GET,
     );
   }
 }
 
 export class DeleteProductLink extends HypermediaLink {
   constructor(params: string = '{?uuid}') {
-    super('delete-product', `/products/${params}`, 'DELETE');
+    super('delete-product', `/products/${params}`, httpMethods.DELETE);
   }
 }
